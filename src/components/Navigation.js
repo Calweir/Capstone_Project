@@ -2,7 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Navigation.css";
 
-const Navigation = ({ handleOpen, handleLogin, userLogin }) => {
+//Passed props to Navigation file to handle setting username within the header once the user either registers or logins.
+const Navigation = ({
+  handleRegister,
+  handleLogin,
+  userLogin,
+  registerUsername,
+}) => {
   return (
     <div className="header">
       <div className="logo">
@@ -12,6 +18,7 @@ const Navigation = ({ handleOpen, handleLogin, userLogin }) => {
           alt="ReBull logo"
         />
       </div>
+      {/*Used Link method to allow for easy transition to different components within the website. */}
       <ul className="navMenu">
         <li>
           <Link className="links" to="/">
@@ -28,20 +35,21 @@ const Navigation = ({ handleOpen, handleLogin, userLogin }) => {
             Shopping Cart
           </Link>
         </li>
-        {userLogin ? (
-          <li>Welcome, {userLogin}</li>
+        {/*Created a condition that renders either username of the end user from either sign up modal or login modal. If the condition is meet the links for sign up and login or taken away and the message welcome, "username" is displayed.*/}
+        {userLogin || registerUsername ? (
+          <li>Welcome, {userLogin || registerUsername}</li>
         ) : (
           <>
             <li>
-              <button className="userArea" onClick={handleOpen}>
-                <Link className="links" to="./userSignup">
+              <button className="userArea" onClick={handleRegister}>
+                <Link to="/" className="links">
                   Sign Up
                 </Link>
               </button>
             </li>
             <li>
               <button className="userArea" onClick={handleLogin}>
-                <Link to="./login" className="links">
+                <Link to="/" className="links">
                   Login
                 </Link>
               </button>
