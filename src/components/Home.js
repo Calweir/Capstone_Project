@@ -16,6 +16,7 @@ const Home = () => {
     autoplaySpeed: 4000,
   };
 
+  //Provided the array or URL's that have the images i want displayed within the slideshow.
   const images = [
     "https://www.blenderseyewear.com/cdn/shop/articles/maxheader1.jpg?v=1680542244",
     "https://shop.mpg-eyewear.com/Content/Images/Manufacturers/RedBull%20SPECT/RB_SPECT_Slider1.png",
@@ -32,6 +33,7 @@ const Home = () => {
           design meets peak performance
         </h3>
 
+        {/*used props settings to include all settings instructions. Next the map function is used to display all images in the sequence which follows the index of the images and the plus 1 allows the slideshow to go to the next img target.*/}
         <div className="divSlideshow">
           <Slider {...settings}>
             {images.map((img, index) => (
@@ -43,6 +45,7 @@ const Home = () => {
         </div>
       </div>
 
+      {/*Each div contains and image and a corresponding heading with the information about the product. */}
       <div className="dakotaImageContainer">
         <img src={DakotaImage} alt="Wing system specs" width={800} />
         <h3>
@@ -58,6 +61,7 @@ const Home = () => {
         <img src={FlyingBull} alt="Flying Bull SPECT" width={600} />
       </div>
 
+      {/*Footer contains all the necessary links that the user can click to follow any information about the brand. */}
       <footer>
         <div className="footerLogo">
           <h4>
