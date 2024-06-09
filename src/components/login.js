@@ -1,9 +1,9 @@
 import React from "react";
 import { useFormik } from "formik";
-import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import "./login.css";
 
+//Used form validation that contains what input needs to be Required and what conditions need to be meet for the validation to be true.
 const loginValidate = (values) => {
   const errors = {};
 
@@ -18,6 +18,7 @@ const loginValidate = (values) => {
   return errors;
 };
 
+//Passed props into login page that allows for the modal to be opened and the state to be updated that allows the username to be displayed within the navigation menu.
 const LoginPage = ({ handleLoginClose, setUserLogin }) => {
   const formik = useFormik({
     initialValues: {
@@ -33,6 +34,7 @@ const LoginPage = ({ handleLoginClose, setUserLogin }) => {
 
   return (
     <div>
+      {/*Modal has show and onHide function that allows the modal to be open and than when submitted the function declared passing the username and then closed the modal to show the user is logged in. */}
       <Modal show={true} onHide={handleLoginClose}>
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
@@ -58,7 +60,7 @@ const LoginPage = ({ handleLoginClose, setUserLogin }) => {
               value={formik.values.username}
             />
           </div>
-
+          {/*Each input uses formik function to update the values and form validation for on change / onblur. Followed HyperionDev pdf Form Validation for this code structure. */}
           <div className="userInput">
             <label className="loginLabel" htmlFor="loginPassword">
               Password:
