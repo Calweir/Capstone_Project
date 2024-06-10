@@ -5,10 +5,16 @@ import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import { useState } from "react";
 import { DropdownButton, DropdownItem, Modal, Button } from "react-bootstrap";
+import { removeItemFromCart } from "./cartSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-//Used reduce method to make the calculation of the total price of the products in th shopping cart. Calculations are initalised at zero in the beginning.
-//Followed https://medium.com/yavar/how-to-use-the-reduce-in-javascript-and-react-4bc8b5f8fa4b Medium article on how this method works and the syntax behind it.
-const ShoppingCart = ({ cartItems }) => {
+//Declared dispatch to allow the action of the user removing a item from the shopping cart.
+//Selector is declared to find the state of what cartItems have been added into the shopping cart from the state slice.
+//Followed HyperionDev Redux pdf document.
+const ShoppingCart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
   const totalPrice = cartItems.reduce((total, item) => {
     return total + item.price;
   }, 0);
@@ -23,6 +29,11 @@ const ShoppingCart = ({ cartItems }) => {
 
   const handleModalClose = () => setHelpModal(false);
   const handleModalOpen = () => setHelpModal(true);
+
+  //Used dispatch function to allow changes to take action with in removing an item from the shopping cart through the products id.
+  const handleRemove = (id) => {
+    dispatch(removeItemFromCart(id));
+  };
 
   return (
     <div>
@@ -45,7 +56,12 @@ const ShoppingCart = ({ cartItems }) => {
                 style={{ width: "150px" }}
               />
               <p>Price: R{item.price.toFixed(2)}</p>
-              <p>Quanity: {item.quanity}</p>
+              <button
+                onClick={() => handleRemove(item.id)}
+                className="removeButton"
+              >
+                Remove
+              </button>
             </div>
           ))}
           {/*Used the fixed method to ensure all displayed prices only contain twodecimal places. */}
