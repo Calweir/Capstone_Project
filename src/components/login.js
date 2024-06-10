@@ -31,6 +31,7 @@ const LoginPage = ({ handleLoginClose, setUserLogin }) => {
       handleLoginClose();
     },
   });
+  //the validate code, uses the values provided from the user (input). Then if form is successful the function is called to set that username within the navigation component to display to the user they logged in.
 
   return (
     <div>
@@ -47,9 +48,13 @@ const LoginPage = ({ handleLoginClose, setUserLogin }) => {
         />
         <form onSubmit={formik.handleSubmit}>
           <div className="userInput">
+            {/*Again here i used the same method. Label and input used for user interaction. The conditions below check if there is a related error in the form validation. If an error occurs the necessary error message is displayed to the user as to why. */}
             <label className="loginLabel" htmlFor="username">
               Username:
             </label>
+            {formik.touched.username && formik.errors.username ? (
+              <div className="errors">{formik.errors.username}</div>
+            ) : null}
             <input
               className="loginInput"
               id="username"
@@ -65,6 +70,9 @@ const LoginPage = ({ handleLoginClose, setUserLogin }) => {
             <label className="loginLabel" htmlFor="loginPassword">
               Password:
             </label>
+            {formik.touched.loginPassword && formik.errors.loginPassword ? (
+              <div className="errors">{formik.errors.loginPassword}</div>
+            ) : null}
             <input
               className="loginInput"
               id="loginPassword"
