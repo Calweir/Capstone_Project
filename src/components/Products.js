@@ -5,8 +5,12 @@ import Row from "react-bootstrap/Row";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import "./Products.css";
+import { useDispatch } from "react-redux";
+import { addItemToCart } from "./cartSlice";
 
-const Products = ({ addtoCart }) => {
+const Products = () => {
+  //Delcared dispatch that will allow me to make changes to what products are added into the shopping cart.
+  const dispatch = useDispatch();
   //Created an array objects that contains all the different information about the products within the webpage. Each with a price, image, title, description and a specific id.
   const products = [
     {
@@ -105,6 +109,11 @@ const Products = ({ addtoCart }) => {
       price: 2000.0,
     },
   ];
+
+  //initialising an action to take place and update the state of what items are added into the shopping cart component.
+  const addtoCart = (product) => {
+    dispatch(addItemToCart(product));
+  };
 
   return (
     <div>
