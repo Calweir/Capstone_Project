@@ -5,39 +5,21 @@ import Navigation from "./components/Navigation";
 import UserSignup from "./components/userSignup";
 import Login from "./components/login";
 import Products from "./components/Products";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ShoppingCart from "./components/shoppingCart";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "./components/authSlice";
+import { addItemToCart } from "./components/cartSlice";
 
 function App() {
+  //Again declared dispatch / selector to allow for changes in state and finding the properties of the sign up authentication and cart items.
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.isAuthenticated);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
+  //Used state and declared both as false, as this allows the website to update the state to true once the user opens the login link or the sign up link.
   const [loginOpen, setloginOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [userLogin, setUserLogin] = useState("");
-  const [registerUsername, setRegisterUsername] = useState("");
   const [registerOpen, setRegisterOpen] = useState(false);
-
-  useEffect(() => {
-    const userCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(userCart);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  const addtoCart = (products) => {
-    const existingItem = cartItems.find((item) => item.id === products.id);
-    if (existingItem) {
-      setCartItems(
-        cartItems.map((item) =>
-          cartItems.id === products.id
-            ? { ...item, quanity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setCartItems([...cartItems, { ...products, quanity: 1 }]);
-    }
-  };
 
   const handleLogin = () => setloginOpen(true);
   const handleLoginClose = () => setloginOpen(false);
@@ -45,14 +27,22 @@ function App() {
   const handleRegister = () => setRegisterOpen(true);
   const handleRegisterClose = () => setRegisterOpen(false);
 
+  const setRegisterUsername = (username) => {
+    dispatch(login({ username }));
+  };
+  //Both dispatch methods used to action a state of setting the given username of the end user within the navigation header links.
+  const setUserLogin = (username) => {
+    dispatch(login({ username }));
+  };
+
   return (
     <Router>
       <div className="App">
         <Navigation
           handleLogin={handleLogin}
-          userLogin={userLogin}
+          userLogin={user?.username}
           handleRegister={handleRegister}
-          registerUsername={registerUsername}
+          registerUsername={user?.username}
         />
         {registerOpen && (
           <UserSignup
@@ -70,7 +60,11 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route
             path="/products"
-            element={<Products addtoCart={addtoCart} />}
+            element={
+              <Products
+                addItemToCart={(product) => dispatch(addItemToCart(product))}
+              />
+            }
           />
           <Route
             path="/shoppingCart"
