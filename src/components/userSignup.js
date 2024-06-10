@@ -2,62 +2,73 @@ import React from "react";
 import { useFormik } from "formik";
 import { Modal, Button } from "react-bootstrap";
 import "./userSignup.css";
+import { useDispatch } from "react-redux";
+import { login } from "./authSlice";
 
-//Used form validation for the users registration page.
+//Used form validation for the users registration page.to ensure that credientials meet certain standards for security purposes.
 const RegisterationValidate = (values) => {
   const errors = {};
 
-  //Below are the if statement that make sure all input is appropiately validated. The statements are used for users name, surname, username, email, password and a confirm password input.
+  //Below are the if statement that make sure all input is appropiately validated. The statements are used for users First name, surname, username, email, password and a confirm password input.
   if (!values.FirstName) {
     errors.FirstName = "Required";
-  } else if (values.FirstName.length > 20) {
+  } //Makes sure name is not longer than 20 letters
+  else if (values.FirstName.length > 20) {
     errors.FirstName = "First name must be less than 20 characters";
   }
 
   if (!values.surname) {
     errors.surname = "Required";
-  } else if (values.surname.length > 20) {
+  } //Makes sure surname is not longer than 20 letters
+  else if (values.surname.length > 20) {
     errors.surname = "Surname must not be longer than 20 Characters";
   }
   if (!values.username) {
     errors.username = "Required";
-  } else if (values.username.length < 5) {
+  } //Form validation makes sure that username is not less than five letters.
+  else if (values.username.length < 5) {
     errors.username = "Username must be at least 5 characters";
   }
 
   if (!values.email) {
     errors.email = "Required";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+  } //else if statement used to check if user entered a valid email address. Followed HyperionDev document Form validation on how to use this statement.
+  else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
     errors.email = "Invalid email address provided";
   }
   if (!values.password) {
     errors.password = "Required";
-  } else if (values.password.length < 8) {
+  } //Checks if password is greater than 8 characters.
+  else if (values.password.length < 8) {
     errors.password = "Password must be longer than 8 characters.";
   } else if (!/[A-Z]/.test(values.password)) {
     errors.password = "Password must contain capital letter";
-  } else if (!/[a-z]/.test(values.password)) {
+  } // Checks if password contains lowercase letter.
+  else if (!/[a-z]/.test(values.password)) {
     errors.password = "Password must contain lowercase letter";
-  } else if (!/[0-9]/.test(values.password)) {
+  } // Checks if password contains a number.
+  else if (!/[0-9]/.test(values.password)) {
     errors.password = "Password must contain a number";
-  } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(values.password)) {
+  } // Checks if password contains a least one special case character.
+  else if (!/[!@#$%^&*(),.?":{}|<>]/.test(values.password)) {
     errors.password = "Password must contain a special case character";
   }
 
   if (!values.passwordConfirm) {
     errors.passwordConfirm = "Required";
-  } else if (values.passwordConfirm !== values.password) {
+  } //statement makes sure that the passwords match exactly.
+  else if (values.passwordConfirm !== values.password) {
     errors.passwordConfirm = "Passowrds do not match";
   }
   return errors;
 };
 
-//Passed props for updating state on the users username once registered and allowing for the modal to be closed once the user has submitted there form.
-const RegisterPage = ({
-  handleRegisterClose,
-  setRegisterUsername,
-  registerOpen,
-}) => {
+//Passed prop allowing for the modal to be closed once the user has submitted there form.
+const RegisterPage = ({ handleRegisterClose }) => {
+  //Used Dispatch to allow me to change the actions that are created in the redx slice.
+  const dispatch = useDispatch();
+
+  //initialised the values that will be used from the errors objects above and for the input values.
   const formik = useFormik({
     initialValues: {
       FirstName: "",
@@ -70,7 +81,7 @@ const RegisterPage = ({
     validate: RegisterationValidate,
     onSubmit: (values) => {
       console.log("form submitted", values);
-      setRegisterUsername(values.username);
+      dispatch(login({ username: values.username }));
       handleRegisterClose();
     },
   });
@@ -91,6 +102,7 @@ const RegisterPage = ({
             <h4>Register</h4>
             <div>
               <div className="userInput">
+                {/*Used label and input so the user can interact with the sign up page. Below is how i asked the user for their first name and used formik to handle changes and blur within the input. */}
                 <label htmlFor="FirstName">First Name:</label>
                 <input
                   id="FirstName"
@@ -119,6 +131,7 @@ const RegisterPage = ({
                   <div className="error">{formik.errors.surname}</div>
                 ) : null}
               </div>
+              {/*Above i used a condition that checks for any errors relating to the users surname. If an error occurs a div will display with the necessary error message. */}
 
               <div className="userInput">
                 <label htmlFor="email">Email:</label>
