@@ -27,4 +27,4 @@ To run this project locally, follow these steps:
 2. Open terminal in the repository.
 3. cd redbull-eyewear within terminal.
 4. Then use npm install.
-5. Lastly type npm start.
+5. Lastly type npm run start.
